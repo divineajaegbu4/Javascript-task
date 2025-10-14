@@ -22,10 +22,10 @@ const findMax = () => {
         }
     }
 
-    console.log(max)
+    return max
 }
 
-findMax();
+
 
 const findMin = () => {
     let min = numbers[0];
@@ -40,7 +40,6 @@ const findMin = () => {
     console.log(min)
 }
 
-findMin();
 
 
 const sum = (arr) => {
@@ -53,11 +52,11 @@ const sum = (arr) => {
    return sum;
 }
 
-const getSum = sum(numbers);
 
-console.log(getSum)
+const getMax = findMax();
 
+console.log("max", getMax);
 
-const average = getSum / numbers.length
+// const average = getSum / numbers.length
 
-console.log(average);
+// console.log("average", average);

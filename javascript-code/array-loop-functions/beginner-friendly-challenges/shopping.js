@@ -39,20 +39,24 @@ addShoppingList("Laptop", "N/A", false);
 
 console.log("---------------------remove items-----------------")
 
+
 const removeItem = (itemsId) => {
-    for(let i = shoppingList.length - 1; i > 0; i--) {
+    for(let i = shoppingList.length - 1; i >= 0; i--) {
         const shoppingId = shoppingList[i];
 
         if(shoppingId.id === itemsId) {
             shoppingList.splice(i, 1);
 
-            console.log(`${itemsId} deleted!`)
-            console.log(shoppingList);
+            console.log(`${shoppingId.id} deleted!`)
         }
-
-       
     }
+
+    console.log(shoppingList)
 }
 
 
+removeItem(1)
 removeItem(2)
+removeItem(3)
+removeItem(4)
+removeItem(5)

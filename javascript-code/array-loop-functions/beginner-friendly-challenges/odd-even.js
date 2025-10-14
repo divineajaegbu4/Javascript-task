@@ -17,9 +17,11 @@ const classifyOddAndEven = () => {
 
     // loop through result array
     
-    for(let i = 0; i < result.length; i++) {
-        console.log(result[i])
-    }   
+    // for(let i = 0; i < result.length; i++) {
+    //     console.log(result[i])
+    // } 
+    
+    console.log(result);
 }
 
 

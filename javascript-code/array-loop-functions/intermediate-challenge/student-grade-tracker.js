@@ -12,7 +12,7 @@
 // Print out a “report card” for each student
 
 const studentCard = [
-    {id: 1, name: "Divine Ajaegbu", score: 50},
+    {id: 1, name: "Divine Ajaegbu", score: 50}, 
 
     {id: 2, name: "Agu Ikechukwu", score: 40},
 
@@ -99,8 +99,6 @@ const reportCard = (name) => {
         if(student.name === name) {
             classReportCard = student;
         }
-       
-
     }
 
     console.log(classReportCard)
