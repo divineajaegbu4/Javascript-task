@@ -66,6 +66,7 @@ const findHighestScoreStudent = (name) => {
 
     if(!foundStudent) {
         
+        
         return `${name} is not our student!`
 
     }else if(highestStudent && highestStudent.name === name) {
