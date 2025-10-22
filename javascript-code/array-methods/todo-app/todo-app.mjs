@@ -2,9 +2,8 @@ import axios from "axios"
 
 class TodoApp {
     constructor() {
-      this.data = null;
-      this.nextId = 0;
-      
+      this.data = null;  
+      this.nextId = 0;    
     }
 
     async getTodos() {
@@ -22,16 +21,16 @@ class TodoApp {
     }
 
     displayTodos() {
-      this.data.forEach(todo => todo.completed ? console.log(`✅ ${todo.title}`): console.log(`❌ ${todo.title}`))
+      const titles = this.data.map(todo => todo.completed ? `✅ ${todo.title}` : `❌ ${todo.title}`)
+
+      return titles.join('\n');
     }
 
-    async addTask(completed, title, userId) {
+    async addTask(data) {
         
         const todoList = {
           id: this.nextId++,
-          userId: userId,
-          completed: completed,
-          title: title
+          ...data
         }
 
       try {
@@ -39,7 +38,7 @@ class TodoApp {
        
         this.data.push(response.data)
 
-        console.table(this.data)
+        console.table(this.data);
       }catch(err) {
         console.log("Error:", err)
       }finally {
@@ -49,35 +48,33 @@ class TodoApp {
     }
 
     markItCompleted(taskId) {
-      let dataId = null;
+      const todoId = this.data.find(todo => todo.id === taskId);
 
-       this.data.forEach(data => {
-        if(data.id === taskId) {
-          dataId = data
-        }
-       })
-
-       console.log(dataId)
-
-       // ✅ Check if task exists first
-        if (!dataId) {
+        if (!todoId) {
            return {
             message: `❌ Task with ID ${taskId} not found!`
           };
       }
 
-       if(!dataId.completed) {
+        if(!todoId.completed) {
           return {
-            completed: `${dataId.completed}: Task not Completed!`
+            completed: `${todoId.completed}: Task not Completed!`
           }
        }else {
           return {
-            completed: `${dataId.completed}: Task Completed!`
+            completed: `${todoId.completed}: Task Completed!`
           }
        }
+
     }
 
-    deleteTask(taskId) {
+    async deleteTask(taskId) {
+
+      const deleteTask = await axios.delete(`https://jsonplaceholder.typicode.com/todos/${taskId}`)
+      // It shows {} because it didn't delete anything because is not a real API
+      console.log("Delete:", deleteTask.data)
+      
+      // I deleted it manually using this code
      const oldLength = this.data.length;
 
      console.log("OldLength:", oldLength)
@@ -88,61 +85,59 @@ class TodoApp {
      console.log("NewLength:", this.data.length)
 
      if(this.data.length < oldLength) {
-        return `Task with ID ${taskId} deleted successfully!`
+        console.log(`Task with ID ${taskId} deleted successfully!`)
      }else {
-      return `Task with ID ${taskId} not found!`
+        console.log(`Task with ID ${taskId} not found!`)
      }
 
+     return this.data
     }
 
-    editTask(taskId, title, completed, userId) {
-      let editUsersTodo = null;
+    async editTask(taskId, title, completed, userId) {
 
-     const editTodo = this.data.find(todo => todo.id === taskId);
+    const editTodo = this.data.find(todo => todo.id === taskId);
+
+
 
      if(!editTodo) {
-        editUsersTodo = "Todo not found!"
-     }else {
-       editUsersTodo = {
-        id: editTodo.id,
-        title: `${editTodo.title} edited to ${editTodo.title = title}`,
-        completed: `${editTodo.completed} edited to ${editTodo.completed = completed}`,
-        nextId: `${editTodo.userId} edited to ${editTodo.userId = userId}`
-       }
+        return "Id not found"
      }
 
-     return editUsersTodo;
+      editTodo.title = title;
+      editTodo.completed = completed;
+      editTodo.userId = userId
 
-    }
+     await axios.put(`https://jsonplaceholder.typicode.com/todos/${taskId}`, editTodo)
 
-    viewAllTask() {
-      
+     return editTodo;
+    
     }
 }
 
 
 const app = new TodoApp();
-
-
 const getTodos = await app.getTodos();
-console.log(getTodos)
-
 const getDisplayTodos = app.displayTodos()
+ await app.addTask({
+  completed: true,
+  title: "Divine",
+  userId: 10
+})
 
-await app.addTask(true, "Divine", 4);
-await app.addTask(false, "Ikechukwu Agu", 3);
-await app.addTask(true, "Divine", 4);
+const getMarkItCompleted = app.markItCompleted(100)
+const getDeleteTask = await app.deleteTask(1)
+const getEditTask =  await app.editTask(100, "The love from the sky", true, 100)
 
-const getMarkItCompleted = app.markItCompleted(700)
-const getDeleteTask = app.deleteTask(100)
-const getEditTask = app.editTask(1, "Divine", true, 10);
-const getEditTask2 = app.editTask(30, "Ikechukwu Agu", false, 55);
 
+console.log(getTodos)
 console.log(getDisplayTodos)
-console.log(getEditTask)
-console.log(getEditTask2)
 console.log(getMarkItCompleted)
 console.log(getDeleteTask)
+console.log(getEditTask)
+
+
+
+
 
 
 
