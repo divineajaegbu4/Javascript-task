@@ -87,7 +87,41 @@ const errorHandling = async () => {
 
 }
 
-errorHandling()
+// errorHandling()
+
+console.log("=========Retries========")
+
+const fetchWithRetry = async (urls, retries) => {
+   const fetchPromises = urls.map(async url => {
+    for(let attempt = 1; attempt <= retries; attempt++) {
+     
+      try {
+       const response = await fetch(url)
+
+       if(!response.ok) {
+        throw new Error("Fetch failed")
+       }
+
+       const data = await response.json()
+      //  console.log(data)
+      }catch(err) {
+        console.log(attempt)
+        throw new Error(err.message)
+      }
+    }
+   })
+
+   const status = await Promise.allSettled(fetchPromises);
+   console.log(status)
+}
+
+const getUrl =  [
+    "https://jsonplaceholder.typicode.com/todos",
+    "https://jsonplaceholder.typicode.com/photos",
+    "https://wrong-url.com"
+  ]
+
+fetchWithRetry(getUrl, 3)
 
 
 
