@@ -36,8 +36,14 @@ const someUserInAactive = activeUsers.some(user => user.active === false)
 const totalAge = activeUsers.reduce((sum, user) => sum + user.age, 0)
 
 
+
+
+
+
+
+
 console.log(activeUsers);
-console.log(getUserNames)
+console.log(getUserNames.join("\n"))
 console.log(find)
 console.log(checkAllUsersAreAdults)
 console.log(someUserInAactive)
