@@ -102,17 +102,33 @@ const fetchWithRetry = async (urls, retries) => {
         throw new Error("Fetch failed")
        }
 
-       const data = await response.json()
-      //  console.log(data)
+       return await response.json()
       }catch(err) {
-        console.log(attempt)
-        throw new Error(err.message)
+        console.log(`Attempt ${attempt} failed for ${url}: ${err.message}`);
+        if (attempt === retries) {
+          // after all retries, mark as rejected
+          throw new Error(err.message);
+        }
       }
+
+      
+
     }
    })
 
-   const status = await Promise.allSettled(fetchPromises);
-   console.log(status)
+   const getStatus = await Promise.allSettled(fetchPromises);
+    console.log(getStatus);
+
+    getStatus.forEach(item => {
+     if(item.status === "fulfilled") {
+      console.log("The data has successfully resolved")
+    }
+    
+    if(item.status === "rejected") {
+      console.log("Failed")
+    }
+    })
+    
 }
 
 const getUrl =  [
